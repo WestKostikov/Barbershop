@@ -70,3 +70,13 @@ hh = { 	:username => 'Введите имя',
 	erb "Отлично! #{@username}, Вы записаны на стрижку! Ваш телефон: #{@phone}, дата и время: #{@datetime}, барбер: #{@barber}, цвет краски: #{@color}"
 end
 
+get '/showusers' do
+    erb "Hello World"
+end
+
+
+def get_db
+  db = SQLite3::Database.new 'barbershop.db'
+  db.results_as_hash = true
+  return db
+end
