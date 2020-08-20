@@ -22,11 +22,11 @@
  <div class="form-group">
     <label>Ваш барбер:</label>
     <select name="barber" class="form-control">
-      <option>Даниил</option>
-      <option>Павел</option>
-      <option>Егор</option>
-      <option>Максим</option>
-      <option>Артём</option>
+      <option <%= @barber == 'Даниил' ? 'selected' : '' %>>Даниил</option>
+      <option <%= @barber == 'Павел' ? 'selected' : '' %>>Павел</option>
+      <option <%= @barber == 'Егор' ? 'selected' : '' %>>Егор</option>
+      <option <%= @barber == 'Максим' ? 'selected' : '' %>>Максим</option>
+      <option <%= @barber == 'Артём' ? 'selected' : '' %>>Артём</option>
     </select>
   </div>
 
