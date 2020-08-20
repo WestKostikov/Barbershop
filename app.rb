@@ -3,7 +3,9 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
-
+def get_db
+  return SQLite3::Database.new 'barbershop.db'
+end
 
 configure do
   db = get_db
@@ -16,11 +18,15 @@ configure do
       "barber" TEXT,
       "color" TEXT
     )'
+  db.close
 end
 
- 
-
-
+def save_form_data_to_database
+  db = get_db
+  db.execute 'INSERT INTO Users (username, phone, datetime, barber, color)
+  VALUES (?, ?, ?, ?, ?)', [@username, @phone, @datetime, @barber, @color]
+  db.close
+end
 
 
 get '/' do
@@ -46,6 +52,8 @@ post '/Visit' do
 	@barber = params[:barber]
 	@color = params[:color]
 
+  save_form_data_to_database
+
 	# хеш для валидации параметров
 hh = { 	:username => 'Введите имя',
   		:phone => 'Введите телефон',
@@ -57,13 +65,8 @@ hh = { 	:username => 'Введите имя',
     return erb :visit
   end
 
- db = get_db
-  db.execute 'INSERT INTO Users (username, phone, datetime, barber, color)
-  VALUES (?, ?, ?, ?, ?)', [@username, @phone, @datetime, @barber, @color]
+ 
   
 	erb "Отлично! #{@username}, Вы записаны на стрижку! Ваш телефон: #{@phone}, дата и время: #{@datetime}, барбер: #{@barber}, цвет краски: #{@color}"
 end
 
-def get_db
-  return SQLite3::Database.new 'barbershop.db'
-end
