@@ -3,18 +3,25 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+
+
 configure do
-	@db = SQLite3::Database.new 'barbershop.db'
-	@db.execute 'CREATE TABLE "Users" 
-	(
-	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-	"username"	TEXT,
-	"phone"	TEXT,
-	"datestamp"	TEXT,
-	"barber"	TEXT,
-	"color"	TEXT
-);'
+  db = get_db
+  db.execute 'CREATE TABLE IF NOT EXISTS "Users"
+    (
+      "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+      "username" TEXT,
+      "phone" TEXT,
+      "datetime" TEXT,
+      "barber" TEXT,
+      "color" TEXT
+    )'
 end
+
+ 
+
+
+
 
 get '/' do
 	erb "Hello! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Original</a> pattern has been modified for <a href=\"http://rubyschool.us/\">Ruby School</a>"			
@@ -50,6 +57,13 @@ hh = { 	:username => 'Введите имя',
     return erb :visit
   end
 
-
+ db = get_db
+  db.execute 'INSERT INTO Users (username, phone, datetime, barber, color)
+  VALUES (?, ?, ?, ?, ?)', [@username, @phone, @datetime, @barber, @color]
+  
 	erb "Отлично! #{@username}, Вы записаны на стрижку! Ваш телефон: #{@phone}, дата и время: #{@datetime}, барбер: #{@barber}, цвет краски: #{@color}"
+end
+
+def get_db
+  return SQLite3::Database.new 'barbershop.db'
 end
