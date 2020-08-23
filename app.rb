@@ -4,6 +4,12 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def get_db
+  db = SQLite3::Database.new 'barbershop.db'
+  db.results_as_hash = true
+  return db
+end
+
+def get_db
   return SQLite3::Database.new 'barbershop.db'
 end
 
@@ -71,12 +77,7 @@ hh = { 	:username => 'Введите имя',
 end
 
 get '/showusers' do
-    erb "Hello World"
+    erb :showusers
 end
 
 
-def get_db
-  db = SQLite3::Database.new 'barbershop.db'
-  db.results_as_hash = true
-  return db
-end
