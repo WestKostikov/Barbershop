@@ -3,11 +3,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
-def get_db
-  db = SQLite3::Database.new 'barbershop.db'
-  db.results_as_hash = true
-  return db
-end
+
 
 def get_db
   return SQLite3::Database.new 'barbershop.db'
@@ -76,8 +72,18 @@ hh = { 	:username => 'Введите имя',
 	erb "Отлично! #{@username}, Вы записаны на стрижку! Ваш телефон: #{@phone}, дата и время: #{@datetime}, барбер: #{@barber}, цвет краски: #{@color}"
 end
 
+
 get '/showusers' do
+    db = get_db
+
+    @results = db.execute 'select * from Users order by id desc'
+
     erb :showusers
 end
 
 
+def get_db
+  db = SQLite3::Database.new 'barbershop.db'
+  db.results_as_hash = true
+  return db
+end
